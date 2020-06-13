@@ -1,0 +1,26 @@
+GET http://localhost:8080/api/v1/missions
+
+###
+POST http://localhost:8080/api/v1/missions
+
+{ "title": "Save the world Batman !!", "assignedHero": "Batman" }
+###
+POST http://localhost:8080/api/v1/missions/f5f98406-e8ec-4dc5-9ac6-b25775a16611/history-events
+
+{ "description": "Batman descend dans sa cave ..."  }
+###
+POST http://localhost:8080/api/v1/missions/f5f98406-e8ec-4dc5-9ac6-b25775a16611/history-events
+
+{ "description": "Batman s'habille"  }
+###
+POST http://localhost:8080/api/v1/missions/f5f98406-e8ec-4dc5-9ac6-b25775a16611/history-events
+
+{ "description": "Il monte dans sa batmobile ..."  }
+###
+POST http://localhost:8080/api/v1/missions/f5f98406-e8ec-4dc5-9ac6-b25775a16611/history-events
+
+{ "description": "Batman descend dans sa cave ..."  }
+###
+GET http://localhost:8080/api/v1/missions/f5f98406-e8ec-4dc5-9ac6-b25775a16611/history-events
+
+###

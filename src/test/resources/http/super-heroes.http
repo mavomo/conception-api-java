@@ -1,0 +1,11 @@
+GET http://localhost:8080/api/v1/super-heroes/
+
+###
+
+POST http://localhost:8080/api/v1/super-heroes/
+
+{ "name": "Batman-2" }
+
+###
+
+

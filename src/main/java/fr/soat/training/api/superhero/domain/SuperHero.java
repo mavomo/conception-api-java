@@ -14,7 +14,7 @@ public class SuperHero implements Serializable {
     @Column(name = "UUID")
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    private UUID uuid;
+    private UUID uuid ;
 
     @Column(name = "NAME", nullable = false, unique = true)
     private String name;
@@ -22,6 +22,24 @@ public class SuperHero implements Serializable {
     @Column(name = "CREATION_DATE", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public SuperHero() { }
+    public SuperHero() {
+        //to please jpa
+    }
 
+    public SuperHero(String name) {
+        this.name = name;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public UUID getUUID() {
+        return this.uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }
