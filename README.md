@@ -174,3 +174,25 @@ Puis **LE** test!
  * Sinon, faire le même test avec Postman ( pour la posterité ou portabilité c'est selon :) ! 
     ![image info](src/main/resources/assets/get-all-super-heroes-via-postman.JPG)
  
+### Etape bonus : Monitorez vos APIs comme en prod
+Spring boot nous permet de monitorer des API très simplement via "actuator".
+Cette dépendance est déjà présente dans ce projet:
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+- Modifier  la valeur de la proprieté : `management.endpoints.web.exposure.include` de `application.yaml` tel que: 
+```yaml
+management.endpoints.web.exposure.include: '*'
+```
+- [x] Dans la "vraie vie", il est très dangereux d'exposer tous les endpoints de l'actuator. Gros risques de sécurité. 
+L'astérisque ici est pour les besoins de la formation.
+
+#### Visualiser vos métriques : 
+- Health check : http://localhost:8080/actuator/health
+- Changement liquibase: http://localhost:8080/actuator/liquibase
+- Loggers: http://localhost:8080/actuator/loggers
+
+- [x] Curieux du reste ? Voir la [documentation officielle](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-enabling) de Spring boot.
