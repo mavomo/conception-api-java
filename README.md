@@ -7,7 +7,7 @@ Il est essentiel de vérifier que l'existant fonctionne sur votre poste.
 
 * Depuis votre terminal, executez la commande :  
 
-        ``mvn spring:boot-run``
+        mvn spring:boot-run
 
 - [x] Vérifiez bien que vous lancez la commande depuis la racine du projet.
 
@@ -43,13 +43,13 @@ Nous utilisons [H2](https://h2database.com/html/main.html) pour la persistance (
  
 * Depuis votre terminal, executez la commande :  
 
-        ``mvn clean test``
+        mvn clean test
 
 - [x] Vérifiez bien que vous lancez la commande depuis la racine du projet.
 
 Vous devriez avoir le message ci-dessous dans le terminal:
 
-    ``
+    
     ...
     [INFO] Results:
     [INFO]
@@ -60,7 +60,6 @@ Vous devriez avoir le message ci-dessous dans le terminal:
     [INFO] ------------------------------------------------------------------------
     ...
     
-``
 Si vous choisissez de lancer les tests depuis votre IDE ( clic droit > run all tests), vous verrez la barre verte \o/ 
 ![image info](src/main/resources/assets/all_green.JPG)
 
@@ -86,3 +85,92 @@ Tout vos services seront exposé en V1 sur `/api/v1`
 * `/missions/{uuid}/history-events`
   * `GET` : Liste l'historique des événements d'une mission
   * `POST` : Rajoute une nouvelle évènement dans l'historique d'une mission
+  
+## TP 2 : Implémentation des APIs 
+  
+Pour cette partie, nous utiliserons [Spring Web MVC](https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/mvc.html) mais, vous pouvez utiliser [Apache CXF](http://cxf.apache.org/) 
+si vous êtes plus à l'aise.
+Spring Web MVC est déjà reférencée dans ce projet.
+
+    
+    <dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+
+### Etape 1: Ajouter un provider pour Jackson 
+  
+  Afin de pouvoir sérialiser et désérialiser vos POJOS, vous aurez besoin d'un provider implémentant JAX-RS (JSR-331).
+
+    <dependency>
+      	<groupId>com.fasterxml.jackson.jaxrs</groupId>
+       	<artifactId>jackson-jaxrs-json-provider</artifactId>
+    </dependency>
+
+Qui dit implémentation dit Tests car le Test est votre premier client/ consommateur d'API.  
+
+### Etape 2 :Ajouter de quoi tester vos APIs !
+   
+Nous avons choisi restAssured pour l'implémentation des tests. Et comme nous avions opté pour du Spring MVC, 
+nous pouvons directement utiliser *RestAssured pour Spring Mock MVC*.
+   
+    <dependency>
+      	<groupId>io.rest-assured</groupId>
+      	<artifactId>spring-mock-mvc</artifactId>
+      	<scope>test</scope>
+    </dependency>
+    
+### Etape 3 : Créez votre API
+Créer les endpoints défini lors du TP1 dans 2 classes :
+  * `SuperHeroApi`
+  * `MissionApi`
+    
+Penser bien à annoter vos classes & vos méthodes des annotations suivantes :
+
+* `@GetMapping`
+* `@PostMapping`
+* Et surtout ... `@RestController` et `@RequestMapping`  du package `org.springframework.web.bind.annotation.*`;
+ 
+   
+### Etape 4: Test driven everything ! ( Je vous accopagne)
+    
+Voici un petit exemple de test qui vérifie vérifie qu'une API renvoie HTTP 200 lorsque l'adresse `/api/v1//super-heroes/` est implémentée.
+```java
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class SuperHeroApiShould {
+
+    @LocalServerPort
+    private int port;
+
+    protected RequestSpecification given() {
+        return RestAssured.given()
+                .port(port)
+                .basePath("/api/v1/");
+    }
+
+   @Test
+    void respond_with_a_200_status_when_getting_all_the_super_heroes_endpoint_exists() {
+
+        this.given()
+                .when()
+                .get("/super-heroes/")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value());
+    }
+}
+```
+Le test est vert ? On peut passer en test du code de production !!! 
+
+### Etape 5: Appelez votre API "Live"  (avec un client API) 
+    
+Votre test est vert? Félicitations, vous pouvez être sûrs/sûres que votre API répond.
+ 
+#### Pour vérifier: 
+
+Commencez par déployer votre application via spring boot: `mvn spring-boot:run`     
+Puis **LE** test!
+* Pour les plus pressés : ` curl localhost:8080/api/v1/super-heroes/`
+ * Sinon, faire le même test avec Postman ( pour la posterité ou portabilité c'est selon :) ! 
+    ![image info](src/main/resources/assets/get-all-super-heroes-via-postman.JPG)
+ 
