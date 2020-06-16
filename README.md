@@ -129,7 +129,7 @@ Penser bien à annoter vos classes & vos méthodes des annotations suivantes :
 
 * `@GetMapping`
 * `@PostMapping`
-* Et surtout ... `@RestController` et `@RequestMapping`  du package `org.springframework.web.bind.annotation.*`;
+* Et surtout ... `@RestController` du package `org.springframework.web.bind.annotation.*` au dessus de la classe;
  
    
 ### Etape 4: Test driven everything ! ( Je vous accopagne)
